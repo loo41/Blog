@@ -53,7 +53,7 @@
        <div id="appScreen_box">
          <vuc-material :output="output" class="appScreen-material">
          </vuc-material>
-         <div class="appScreen-info">移动端正在开发中，请期待</div>
+         <div class="appScreen-info">移动端正在开发中，请期待 <p>上拉访问 PC 端页面</p></div>
        </div>
     </div>
   </div>
@@ -530,7 +530,8 @@ export default {
   font-size: 25px;
   color: #606266;
   letter-spacing: 1px;
-  border-radius: 5px;
+  line-height: 50px;
+  border-radius: 10px;
   padding: 60px;
   transform: translateX(-50%) translateY(-50%)
 }
