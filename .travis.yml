@@ -10,9 +10,7 @@ cache:
 
 install:
   - npm install
-
-before_script:
-
+  
 script:
   - npm run build
 
@@ -28,5 +26,3 @@ after_script:
 branches:
   only:
     - master
-env:
- global:
