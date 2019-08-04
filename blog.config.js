@@ -13,7 +13,8 @@ module.exports =  {
     require('./src/assets/index_bg2.jpg'),
     require('./src/assets/index_bg3.jpg'),
     require('./src/assets/index_bg4.jpg'),
-    require('./src/assets/index_bg5.jpg')
+    require('./src/assets/index_bg5.png'),
+    require('./src/assets/index_bg6.jpg')
   ],
   // 登陆 github 相关信息
   user: {

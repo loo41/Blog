@@ -69,6 +69,7 @@ export default {
             tocSelector: '.gitalk-toc',
             contentSelector: '.markdown-body',
             headingSelector: 'h1, h2, h3',
+            onClick: false,
           })
           tocbot.refresh()
         })

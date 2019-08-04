@@ -107,9 +107,12 @@ export default {
       this.setScroll(scrollTop, this.offset[newValue])
     }
   },
+  activated () {
+    console.log(995)
+    this.setEvent()
+  },
   created () {
     this.getData({page: this.page, per_page: 10})
-    this.setEvent()
   },
   mounted () {
     this.isBrowser()
@@ -122,6 +125,7 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
+    this.isScroll = true
     window.removeEventListener('scroll', this.sendEvent)
     next()
   },
