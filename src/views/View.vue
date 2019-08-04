@@ -3,7 +3,7 @@
     <Header :title="title"/>
     <div class="main markdown-body" ref="markdownBody">
       <div class="markdown-content"><div v-html="content"></div></div>
-      <div id="toc">
+      <div id="toc" ref="toc">
         <div class="gitalk-toc toc"></div>
       </div>
     </div>
@@ -34,11 +34,8 @@ export default {
     gitalkLife: null
   }),
   components: { Header },
-  created () {
+  activated () {
     this.setData()
-  },
-  mounted () {
-    this.setTalk()
   },
   computed: mapState(['article']),
   methods: {
@@ -64,13 +61,21 @@ export default {
     },
     setTalk () {
       if (this.$refs.markdownBody) {
+        tocbot.destroy()
+        if (this.$refs.toc) {
+          this.$refs.toc.removeChild(
+            document.querySelector('.gitalk-toc')
+          )
+          let node = document.createElement('div')
+          node.className = 'gitalk-toc toc'
+          this.$refs.toc.appendChild(node)
+        }
         this.$nextTick(() => {
           this.general_ids()
           tocbot.init({
             tocSelector: '.gitalk-toc',
             contentSelector: '.markdown-body',
-            headingSelector: 'h1, h2, h3',
-            onClick: true
+            headingSelector: 'h1, h2, h3'
           })
           tocbot.refresh()
         })

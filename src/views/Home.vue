@@ -108,7 +108,6 @@ export default {
     }
   },
   activated () {
-    console.log(995)
     this.setEvent()
   },
   created () {
