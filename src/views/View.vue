@@ -44,6 +44,7 @@ export default {
   methods: {
     setData () {
       const { index } = this.$route.query
+      this.hash = location.hash.slice(2).split('&')[0]
       this.index = Number(index)
       this.renderData()
     },
@@ -57,7 +58,7 @@ export default {
       for (let i = 1; i <= 6; i++) {
         let headers = this.$refs.markdownBody.querySelectorAll('h' + i)
         headers.forEach((v, index) => {
-          v.id = 'h_' + i + '_' + index
+          v.id = this.hash + '&h_' + i + '_' + index
         })
       }
     },
@@ -69,7 +70,7 @@ export default {
             tocSelector: '.gitalk-toc',
             contentSelector: '.markdown-body',
             headingSelector: 'h1, h2, h3',
-            onClick: false,
+            onClick: true
           })
           tocbot.refresh()
         })
@@ -100,7 +101,7 @@ export default {
       this.$router.push({path: '/view', query: { index: this.index }})
       tocbot.destroy()
       this.$nextTick(() => {
-        this.renderData()
+        this.setData()
       })
     },
     nextRouter () {
@@ -108,7 +109,7 @@ export default {
       this.$router.push({path: '/view', query: { index: this.index }})
       tocbot.destroy()
       this.$nextTick(() => {
-        this.renderData()
+        this.setData()
       })
     }
   }
