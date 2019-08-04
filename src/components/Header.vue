@@ -37,7 +37,7 @@ export default {
     Config: Config,
     type: ['blur', 'blackWhite', 'prints', 'blur', 'cameo'][Math.floor(Math.random() * 6)],
     W: 0,
-    color: ['#002642', '#840032', '#E59500', '#E5DADA', '#02040F']
+    color: ['#C0C4CC', '#909399', '#606266', '#303133', '#DCDFE6', '#E4E7ED', '#EBEEF5', '#F2F6FC', '#000000', '#FFFFFF']
   }),
   props: {
     title: {
