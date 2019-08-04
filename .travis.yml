@@ -22,14 +22,11 @@ after_script:
   - git config user.name "${U_NAME}"
   - git config user.email "${U_EMAIL}"
   - git add .
-  - git commit -m "Update tools"
+  - git commit -m "[更新 Blog]"
   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:${P_BRANCH}
 
-#指定分支，只有指定的分支提交时才会运行脚本
 branches:
   only:
     - master
 env:
  global:
-   # 我将其添加到了travis-ci的环境变量中
-   #- GH_REF: github.com/yimogit/metools.git 
