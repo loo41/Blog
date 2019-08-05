@@ -18,6 +18,11 @@ const router =  new Router({
       path: '/view',
       name: 'view',
       component: resolve => require(['@/views/View.vue'], resolve)
+    },
+    {
+      path: '/mobile',
+      name: 'mobile',
+      component: resolve => require(['@/views/M.vue'], resolve)
     }
   ]
 })

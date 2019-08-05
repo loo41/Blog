@@ -49,13 +49,6 @@
       </div>
     </div> 
     <Footer></Footer>
-    <div id="appScreen" v-if="m">
-       <div id="appScreen_box">
-         <vuc-material :output="output" class="appScreen-material">
-         </vuc-material>
-         <div class="appScreen-info">移动端正在开发中，请期待 <p>上拉访问 PC 端页面</p></div>
-       </div>
-    </div>
   </div>
 </template>
 
@@ -64,7 +57,6 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Author from '../components/Author'
 import Datepicker from 'vuejs-datepicker'
-import { vucMaterial } from 'vuc-material'
 import { zh } from 'vuejs-datepicker/dist/locale'
 import { mapActions, mapState } from 'vuex'
 import Config from '../../blog.config'
@@ -78,26 +70,16 @@ export default {
     selectLabel: '',
     offset: [],
     timer: {},
-    output: 'background',
     isScroll: true,
     isIeBrowser: false,
     scrollTop: 0,
-    m: false,
-    info: {
-      H: 0,
-      W: 0
-    },
-    screenMv: {
-      pageY: 0,
-      relativeY: 0
-    }
+    m: false
   }),
   components: {
     Header,
     Footer,
     Author,
-    Datepicker,
-    vucMaterial
+    Datepicker
   },
   computed: mapState(['labels', 'article', 'isData', 'searchIndex']),
   watch: {
@@ -116,11 +98,9 @@ export default {
   mounted () {
     this.isBrowser()
     this.isM()
-    this.info.H = document.documentElement.clientHeight
-    this.info.W = document.documentElement.clientWidth
+    if (this.m) return this.$router.push('/mobile')
     this.$nextTick(() => {
       this.countTop()
-      if (this.m) this.newScreen()
     })
   },
   beforeRouteLeave (to, from, next) {
@@ -263,62 +243,6 @@ export default {
     },
     viewContent (index) {
       this.$router.push({path: '/view', query: { index }})
-    },
-    getID (id) {
-      return document.getElementById(id)
-    },
-    getClass (classN) {
-      return document.getElementsByClassName(classN)
-    },
-    selectFun (select) {
-      return document.querySelector(select)
-    },
-    tagName (father ,tag) {
-      return father.getElementsByTagName(tag)
-    },
-    newScreen () {
-      if(document.documentElement.clientWidth <= 1024) {
-        this.appScreen = this.getID('appScreen')
-        this.selectFun('.box').style.position = 'fixed'
-        this.appScreen.style.cssText = `height: ${this.info.H}px; width: ${this.info.W}px; display: block!important;`
-        let appScreen_box = this.getID('appScreen_box')
-        appScreen_box.style.cssText = `height: ${this.info.H}px; width: ${this.info.W}px;`
-        addEventListener('touchmove', (event) => { this.touchMove(event) }, false)
-        addEventListener('touchstart', (event) => { this.touchStart(event) }, false)
-        addEventListener('touchend', (event) => { this.touchEnd(event) }, false)
-      } else {
-        return null
-      }
-    },
-    touchMove (event) {
-      if (this.notMove) return
-      let Y = event.targetTouches[0].pageY
-      this.screenMv.relativeY = Y - this.screenMv.pageY
-      this.appScreen.style.top = `${this.screenMv.relativeY}px`
-      if (parseInt(this.appScreen.style.top) >= 0) {
-        this.appScreen.style.top = '0px'
-        return
-      }
-    },
-    touchStart (event) {
-      if (this.notMove) return
-      this.screenMv.pageY = event.targetTouches[0].pageY
-    },
-    touchEnd () {
-      if (this.notMove) return
-      if (parseInt(this.appScreen.style.top) <= -2) {
-        this.notMove = true
-        this.appScreen.style.transform = `translate3d(0px, -${this.info.H}px, 0px)`
-        setInterval(() => {
-          document.removeEventListener('touchmove', this, false)
-          document.removeEventListener('touchstart', this, false)
-          document.removeEventListener('touchend', this, false)
-          this.selectFun('#appScreen').style.display = 'none'
-          this.selectFun('.box').style.position =  'absolute'
-        }, 1000)
-    } else {
-        return
-      }
     }
   }
 }
@@ -504,39 +428,6 @@ export default {
 }
 .display-pc {
   display: none;
-}
-#appScreen {
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  -moz-background-size: 100% 100%;
-  background-color: #C0C4CC;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 100;
-  transition: transform 1s;
-}
-#appScreen_box {
-  position: relative;
-}
-.appScreen-material {
-  position: absolute;
-}
-.appScreen-info {
-  position: absolute;
-  background: rgba(255, 255, 255, .3);
-  z-index: 1000;
-  top: 50%;
-  left: 50%;
-  font-size: 25px;
-  color: #606266;
-  letter-spacing: 1px;
-  line-height: 50px;
-  border-radius: 10px;
-  padding: 60px;
-  transform: translateX(-50%) translateY(-50%)
 }
 </style>
 

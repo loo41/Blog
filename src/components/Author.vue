@@ -3,12 +3,12 @@
     <div>
       <div class="avatar-box">
         <div class="avatar_box">
-          <img :src="userInfo.avatar_url" class="avatar" />
+          <img v-show="userInfo.avatar_url" :src="userInfo.avatar_url" class="avatar" />
         </div>
       </div>
-      <div class="name">{{userInfo.name}}</div>
-      <div class="logo">{{userInfo.login}}</div>
-      <div class="bio">{{userInfo.bio}}</div>
+      <div class="name" :style="color? 'color: white': ''">{{userInfo.name}}</div>
+      <div class="logo" :style="color? 'color: white': ''">{{userInfo.login}}</div>
+      <div class="bio" :style="color? 'color: white': ''">{{userInfo.bio}}</div>
       <div v-if="userInfo.blog"></div>
     </div>
   </div>
@@ -20,6 +20,12 @@ export default {
   data: () => ({
     userInfo: {}
   }),
+  props: {
+    color: {
+      type: Boolean,
+      default: false
+    }
+  },
   created () {
     this.getUserInfo()
   },
