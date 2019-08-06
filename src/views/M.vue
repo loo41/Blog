@@ -6,12 +6,22 @@
           <div class="title">{{Config.title}}</div>
        </div>
     </div>
+    <header class="header">
+      <div class="header-info">
+        <div>
+          <img v-show="userInfo.avatar_url" :src="userInfo.avatar_url" class="avatar" />
+        </div>
+        <div>{{userInfo.name}}</div>
+      </div>
+      <div class="header-label"></div>
+    </header>
   </div>
 </template>
 
 <script>
 import Author from '../components/Author'
 import Config from '../../blog.config'
+import { mapState } from 'vuex'
 export default {
   data: () => ({
     info: {
@@ -26,6 +36,9 @@ export default {
   }),
   components: {
     Author
+  },
+  computed: {
+    ...mapState(['userInfo'])
   },
   mounted () {
     this.info.H = document.documentElement.clientHeight
@@ -100,12 +113,13 @@ export default {
   height: 100%;
   width: 100%;
   position: relative;
+  box-sizing: border-box;
+  padding-top: 12vw;
 }
 #appScreen {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   -moz-background-size: 100% 100%;
-  background-color: #EBEEF5;
   position: absolute;
   top: 0;
   left: 0;
@@ -113,6 +127,7 @@ export default {
   bottom: 0;
   z-index: 100;
   transition: transform 1s;
+  background: linear-gradient(61deg, #909399 10%, #C0C4CC 20%, #C0C4CC 30%, #E4E7ED 40%, #EBEEF5 50%, #ffffff 0)
 }
 #appScreen_box {
   position: relative;
@@ -127,5 +142,39 @@ export default {
   line-height: 100px;
   text-align: center;
   font-size: 25px
+}
+.header {
+  height: 12vw;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+  top: 0
+}
+.header-info {
+  flex: 1;
+  box-sizing: border-box;
+  padding: 0 2vw;
+  display: flex;
+}
+.header-info div:nth-child(1) {
+  height: 100%;
+  width: 14vw;
+  box-sizing: border-box;
+  padding: 2vw;
+  border-radius: 50%;
+  padding-right: 4vw;
+}
+.header-label {
+  width: 14vw;
+  box-sizing: border-box;
+  padding-right: 2vw;
+}
+.avatar {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  transition:all 2s linear;
 }
 </style>

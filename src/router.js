@@ -30,6 +30,10 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/view' && !store.state.article.length) {
     store.commit('getSetArticle')
   }
+  console.log(JSON.stringify(store.state.userInfo))
+  if (JSON.stringify(store.state.userInfo) == '{}') {
+    store.dispatch('getUserInfo')
+  }
   next()
 })
 

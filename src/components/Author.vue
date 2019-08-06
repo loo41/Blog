@@ -15,28 +15,17 @@
 </template>
 
 <script>
-import { getUserInfo } from '@/request'
+import { mapState } from 'vuex'
 export default {
-  data: () => ({
-    userInfo: {}
-  }),
+  data: () => ({}),
   props: {
     color: {
       type: Boolean,
       default: false
     }
   },
-  created () {
-    this.getUserInfo()
-  },
-  methods: {
-    getUserInfo() {
-      getUserInfo().then(result => {
-        this.userInfo = result.data
-      }).catch(e => {
-        console.log(e)
-      })
-    }
+  computed: {
+    ...mapState(['userInfo'])
   }
 }
 </script>

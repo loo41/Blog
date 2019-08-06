@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { getArticle } from './request'
+import { getArticle, getUserInfo } from './request'
 
 Vue.use(Vuex)
 
@@ -9,6 +9,7 @@ export default new Vuex.Store({
     labels: [],
     isData: true,
     article: [],
+    userInfo: {},
     searchIndex: null
   },
   mutations: {
@@ -27,6 +28,9 @@ export default new Vuex.Store({
     },
     setSearchIndex(state, index) {
       state.searchIndex = index
+    },
+    setUserInfo(state, userinfo) {
+      state.userInfo = userinfo
     },
   },
   actions: {
@@ -49,5 +53,12 @@ export default new Vuex.Store({
         })
       })
     },
+    getUserInfo({commit}) {
+      getUserInfo().then(result => {
+        commit('setUserInfo', result.data)
+      }).catch(e => {
+        console.log(e)
+      })
+    }
   }
 })
