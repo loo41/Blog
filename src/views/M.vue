@@ -7,7 +7,7 @@
        </div>
     </div>
     <m-header :openClose="openClose" :labelShow="labelShow" />
-    <div class="content-box">
+    <div class="content-box" v-show="pageShow">
       <transition name="label">
         <div class="labels-box" v-if="labelShow">
           <div class="labels-list" v-show="labels.length">
@@ -71,6 +71,7 @@ export default {
       pageY: 0,
       relativeY: 0
     },
+    pageShow: false,
     Config: Config,
     labelShow: false,
     selectLabel: ''
@@ -172,6 +173,7 @@ export default {
     touchEnd () {
       if (this.notMove) return
       if (parseInt(this.appScreen.style.top) <= -2) {
+        this.pageShow = true
         this.notMove = true
         this.appScreen.style.transform = `translate3d(0px, -${this.info.H}px, 0px)`
         setTimeout(() => {
@@ -230,14 +232,11 @@ export default {
   transition:all 2s linear;
 }
 .content-box {
-  height: 100%;
-  width: 100%;
   position: relative;
 }
 .list-boxs {
   height: 100%;
   width: 100%;
-  overflow-y: scroll; 
 }
 .labels-box {
   position: absolute;

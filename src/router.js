@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
 import Main from './views/Main.vue'
+import Home from './views/Home.vue'
 
 Vue.use(Router)
 
@@ -17,7 +18,7 @@ const router =  new Router({
     {
       path: '/pc',
       name: 'pc',
-      component: resolve => require(['@/views/Home.vue'], resolve)
+      component: Home
     },
     {
       path: '/view',
