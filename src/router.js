@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
-import Home from './views/Home.vue'
+import Main from './views/Main.vue'
 
 Vue.use(Router)
 
@@ -11,8 +11,13 @@ const router =  new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'main',
+      component: Main
+    },
+    {
+      path: '/pc',
+      name: 'pc',
+      component: resolve => require(['@/views/Home.vue'], resolve)
     },
     {
       path: '/view',
@@ -32,10 +37,9 @@ const router =  new Router({
   ]
 })
 router.beforeEach((to, from, next) => {
-  if (to.path === '/view' && !store.state.article.length) {
+  if (!store.state.article.length) {
     store.commit('getSetArticle')
   }
-  console.log(JSON.stringify(store.state.userInfo))
   if (JSON.stringify(store.state.userInfo) == '{}') {
     store.dispatch('getUserInfo')
   }

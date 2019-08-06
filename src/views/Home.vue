@@ -73,7 +73,6 @@ export default {
     isScroll: true,
     isIeBrowser: false,
     scrollTop: 0,
-    m: false
   }),
   components: {
     Header,
@@ -97,8 +96,6 @@ export default {
   },
   mounted () {
     this.isBrowser()
-    this.isM()
-    if (this.m) return this.$router.push('/mobile')
     this.$nextTick(() => {
       this.countTop()
     })
@@ -110,23 +107,6 @@ export default {
   },
   methods: {
     ...mapActions(['getData']),
-    isM () {
-      let sUserAgent = navigator.userAgent.toLowerCase()
-      let bIsIpad = sUserAgent.match(/ipad/i) == "ipad"
-      let bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os"
-      let bIsMidp = sUserAgent.match(/midp/i) == "midp"
-      let bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4"
-      let bIsUc = sUserAgent.match(/ucweb/i) == "ucweb"
-      let bIsAndroid = sUserAgent.match(/android/i) == "android"
-      let bIsCE = sUserAgent.match(/windows ce/i) == "windows ce"
-      let bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile"
-  
-      if (!(bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM)) {
-        this.m = false
-      } else {
-        this.m = true
-      }
-    },
     countTop () {
       const count = () => {
         setTimeout(() => {

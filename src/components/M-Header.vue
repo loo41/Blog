@@ -43,6 +43,7 @@ export default {
 <style>
 .header {
   height: 12vw;
+  width: 100%;
   background: white;
   display: flex;
   justify-content: space-between;

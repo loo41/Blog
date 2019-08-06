@@ -371,5 +371,16 @@ export default {
 }
 .no-data {
   font-size: 3vw;
+  height: 30vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.item {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

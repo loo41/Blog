@@ -1,6 +1,6 @@
 <template>
   <div class="header-slidbar" >
-    <div class="slidbar-item" v-show="$route.path !== '/'" @click="$router.push('/')">
+    <div class="slidbar-item" v-show="$route.path !== '/'" @click="$router.push('/pc')">
       <touch-ripple :speed="1" :opacity="0.3" color="#fff" transition="ease" class="item" >
         <img src="../svg/zhuye.svg" />
       </touch-ripple>
