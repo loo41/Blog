@@ -22,10 +22,10 @@
                 <div class="underline"></div>
               </div>
             </div>
+            <div v-if="(!article.length && page !== 1) || !isData" class="no-data" key="pc-noData">
+              <img src="../svg/nodata.svg" /> 没有找到文章
+            </div>
           </transition-group>
-          <div v-if="(!article.length && page !== 1) || !isData" class="no-data">
-            <img src="../svg/nodata.svg" /> 没有找到文章
-          </div>
           <div class="more-box">
             <div v-show="page !== 1" @click="proPage"><img src="../svg/pre.svg" />   PRO</div>
             <div></div>

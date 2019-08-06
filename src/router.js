@@ -23,6 +23,11 @@ const router =  new Router({
       path: '/mobile',
       name: 'mobile',
       component: resolve => require(['@/views/M.vue'], resolve)
+    },
+    {
+      path: '/m-view',
+      name: 'm-view',
+      component: resolve => require(['@/views/M-View.vue'], resolve)
     }
   ]
 })

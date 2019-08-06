@@ -6,39 +6,84 @@
           <div class="title">{{Config.title}}</div>
        </div>
     </div>
-    <header class="header">
-      <div class="header-info">
-        <div>
-          <img v-show="userInfo.avatar_url" :src="userInfo.avatar_url" class="avatar" />
+    <m-header :openClose="openClose" :labelShow="labelShow" />
+    <div class="content-box">
+      <transition name="label">
+        <div class="labels-box" v-if="labelShow">
+          <div class="labels-list" v-show="labels.length">
+            <span v-for="(label, i) in labels" :key="i + 'label'" :class="selectLabel === label? 'select-labels labels': 'labels'" @click="setLabel(label)">{{label}}</span>
+          </div>
         </div>
-        <div>{{userInfo.name}}</div>
+      </transition>
+      <div class="list-boxs">
+        <transition-group name="list-transition">
+          <div v-for="(item, index) in article" v-show="Config.author || (!Config.author && item.user.login == Config.user.name)" ref="articleItem" :key="index + 'article'" class="main-article">
+            <div class="article-boxs">
+              <div class="article-m-title" @click="viewContent(index)">
+                <p>{{item.title}}</p>
+              </div>
+              <div class="article-m-label" v-show="item.labels && item.labels.length">
+                <span v-for="(label, i) in item.labels" :key="i + 'labels'" class="m-label location-m-label">{{label.name}}</span>
+              </div>
+              <div class="article-m-info">
+                <div><img title="作者" src="../svg/zuozhe.svg" class="icons" /> <div>{{item.user && item.user.login}}</div></div>
+                <div v-if="item.comments"><img title="评论" src="../svg/pinglun.svg" class="icons" /> <div>{{item.comments}}</div></div>
+                <div><img title="时间" src="../svg/shijian.svg" class="icons" /> <div>{{formatTime(item.created_at)}}</div></div>
+                <div><a :href="item.html_url" target="view_window"><img title="链接地址" src="../svg/lianjie.svg" class="icons" /></a></div>
+              </div>
+            </div>
+          </div>
+          <div v-if="(!article.length && page !== 1) || !isData" class="no-data" key="noData">
+            <img src="../svg/nodata.svg" /> 没有找到文章
+          </div>
+        </transition-group>
+        <div class="more-m-box">
+          <div v-show="page !== 1" @click="proPage">
+            <touch-ripple :speed="1" :opacity="0.3" color="#C0C4CC" transition="ease" class="item" >
+              <div><img src="../svg/pre.svg" class="icons"/>   PRO</div>
+            </touch-ripple>
+          </div>
+          <div v-show="page === 1"></div>
+          <div @click="nextPage" v-show="isData">
+            <touch-ripple :speed="1" :opacity="0.3" color="#C0C4CC" transition="ease" class="item" >
+              <div class="next-icon">NEXT   <img src="../svg/next.svg" class="icons" /></div>
+            </touch-ripple>
+          </div>
+        </div>
       </div>
-      <div class="header-label"></div>
-    </header>
+    </div>
   </div>
 </template>
 
 <script>
 import Author from '../components/Author'
 import Config from '../../blog.config'
-import { mapState } from 'vuex'
+import MHeader from '../components/M-Header'
+import { mapActions, mapState } from 'vuex'
 export default {
   data: () => ({
     info: {
       H: 0,
       W: 0
     },
+    page: 1,
     screenMv: {
       pageY: 0,
       relativeY: 0
     },
-    Config: Config
+    Config: Config,
+    labelShow: false,
+    selectLabel: ''
   }),
   components: {
-    Author
+    Author,
+    MHeader
+  },
+  created () {
+    this.getData({page: this.page, per_page: 10})
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(['userInfo', 'labels', 'article', 'isData'])
   },
   mounted () {
     this.info.H = document.documentElement.clientHeight
@@ -48,8 +93,45 @@ export default {
     })
   },
   methods: {
+    ...mapActions(['getData']),
+    viewContent (index) {
+      this.$router.push({path: '/m-view', query: { index }})
+    },
+    openClose () {
+      if (this.labelShow) return this.labelShow = false
+      this.labelShow = true 
+    },
+    setLabel (label) {
+      this.labelShow = false
+      this.page = 1
+      if (this.selectLabel === label) {
+        this.getData({page: this.page, per_page: 10}).then(() => {})
+        return this.selectLabel = ''
+      }
+      this.getData({page: this.page, per_page: 10, labels: label}).then(() => {})
+      this.selectLabel = label
+    },
+    proPage () {
+      if (this.page === 1) return
+      this.page -= 1
+      let options = {page: this.page, per_page: 10}
+      if (this.selectLabel) options.labels = this.selectLabel
+      this.getData(options).then(() => {})
+    },
+    nextPage () {
+      if (!this.article.length) return
+      this.page += 1
+      let options = {page: this.page, per_page: 10}
+      if (this.selectLabel) options.labels = this.selectLabel
+      this.getData(options).then(() => {})
+    },
     getID (id) {
       return document.getElementById(id)
+    },
+    formatTime (time) {
+      if (!time) return ''
+      let date = new Date(time)
+      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
     },
     getClass (classN) {
       return document.getElementsByClassName(classN)
@@ -63,7 +145,6 @@ export default {
     newScreen () {
       if(document.documentElement.clientWidth <= 1024) {
         this.appScreen = this.getID('appScreen')
-        this.selectFun('.box').style.position = 'fixed'
         this.appScreen.style.cssText = `height: ${this.info.H}px; width: ${this.info.W}px; display: block!important;`
         let appScreen_box = this.getID('appScreen_box')
         appScreen_box.style.cssText = `height: ${this.info.H}px; width: ${this.info.W}px;`
@@ -93,12 +174,11 @@ export default {
       if (parseInt(this.appScreen.style.top) <= -2) {
         this.notMove = true
         this.appScreen.style.transform = `translate3d(0px, -${this.info.H}px, 0px)`
-        setInterval(() => {
+        setTimeout(() => {
           document.removeEventListener('touchmove', this, false)
           document.removeEventListener('touchstart', this, false)
           document.removeEventListener('touchend', this, false)
           this.selectFun('#appScreen').style.display = 'none'
-          this.selectFun('.box').style.position =  'absolute'
         }, 1000)
     } else {
         return
@@ -120,7 +200,7 @@ export default {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   -moz-background-size: 100% 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -143,38 +223,153 @@ export default {
   text-align: center;
   font-size: 25px
 }
-.header {
-  height: 12vw;
-  background: white;
-  display: flex;
-  justify-content: space-between;
-  position: fixed;
-  box-shadow: 0 0 2px rgba(0, 0, 0, .2);
-  top: 0
-}
-.header-info {
-  flex: 1;
-  box-sizing: border-box;
-  padding: 0 2vw;
-  display: flex;
-}
-.header-info div:nth-child(1) {
-  height: 100%;
-  width: 14vw;
-  box-sizing: border-box;
-  padding: 2vw;
-  border-radius: 50%;
-  padding-right: 4vw;
-}
-.header-label {
-  width: 14vw;
-  box-sizing: border-box;
-  padding-right: 2vw;
-}
 .avatar {
   height: 100%;
   width: 100%;
   border-radius: 50%;
   transition:all 2s linear;
+}
+.content-box {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+.list-boxs {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll; 
+}
+.labels-box {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5vw;
+  background: white;
+  z-index: 10
+}
+.label-enter-to {
+  transform: translateY(0%);
+  opacity: 1;
+}
+.label-enter-active {
+  transition: all 1s ease;
+}
+.label-enter, .label-leave-to {
+  transform: translateY(100%);
+  opacity: 0.5;
+}
+.label-enter-to {
+  transition: all 1s ease;
+  transform: translateY(0%);
+  opacity: 1;
+}
+.labels-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.labels {
+  padding: 2vw 5vw;
+  border-radius: 5vw;
+  margin-left: 2vw;
+  margin-top: 2vw;
+  border: 1px solid #EBEEF5;
+  transition: all .5s ease;
+  font-size: 4vw;
+  cursor: pointer;
+}
+.select-labels {
+  background: #E4E7ED;
+}
+.article-boxs {
+  min-height: 20vw!important;
+  background: white;
+  box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+  box-sizing: border-box;
+  padding: 5vw;
+  border-radius: 2vw;
+  overflow: hidden;
+}
+.article-m-title {
+  min-height: 10vw;
+  display: flex;
+  cursor: pointer;
+}
+.article-m-title p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+  font-size: 6vw;
+  font-size: #303133;
+}
+.article-m-info {
+  min-height: 10vw;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap; 
+  color: #606266
+}
+.article-m-info div {
+  display: flex;
+  padding-right: 5vw;
+}
+.article-m-info div div{
+  box-sizing: border-box;
+  padding: 0 2vw;
+  display: flex;
+  color: #909399;
+  font-size: 4vw;
+  align-items: center;
+}
+.article-m-label {
+  padding: 3vw 0;
+  display: flex;
+  flex-wrap: wrap;
+  color: #C0C4CC
+}
+.m-label {
+  padding: 2vw 5vw;
+  border-radius: 10vw;
+  border: 1px solid #EBEEF5;
+  transition: all .5s ease;
+  font-size: 3vw;
+  cursor: pointer;
+}
+.m-label:hover {
+  transform: scale(1.2)
+}
+.location-m-label {
+  margin-left: 2vw;
+  margin-top: 2vw
+}
+.icons {
+  height: 4vw;
+}
+.more-m-box {
+  height: 20vw;
+  padding: 10px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+.more-m-box div {
+  flex: 1;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  white-space: pre;
+  cursor: pointer;
+  font-size: 4vw;
+  color: #303133
+}
+.next-icon {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.no-data {
+  font-size: 3vw;
 }
 </style>
