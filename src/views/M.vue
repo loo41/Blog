@@ -232,6 +232,7 @@ export default {
   transition:all 2s linear;
 }
 .content-box {
+  height: 100%;
   position: relative;
 }
 .list-boxs {
@@ -239,7 +240,7 @@ export default {
   width: 100%;
 }
 .labels-box {
-  position: absolute;
+  position: fixed;
   height: 100%;
   width: 100%;
   box-sizing: border-box;

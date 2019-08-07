@@ -48,7 +48,7 @@ export default {
   display: flex;
   justify-content: space-between;
   position: fixed;
-  box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   top: 0;
   z-index: 10
 }
