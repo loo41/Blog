@@ -4,7 +4,7 @@
       <vuc-picture-contrast :type="type" :img="[img]" :W="W" :H="500" :pro="pro" :dir="dir" />
     </div>
     <slider-bar />
-    <div class="header-search-box" v-show="$route.path === '/'">
+    <div class="header-search-box" v-show="$route.path === '/pc'">
       <vucInput 
         type="arc"
         className="search"
