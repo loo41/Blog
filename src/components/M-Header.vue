@@ -12,7 +12,7 @@
         <img src="../svg/guanbi.svg" class="icons" v-show="labelShow" />
       </touch-ripple>
     </div>
-    <div class="header-label" v-show="$route.path !== '/mobile'" @click="$router.push('/mobile')">
+    <div class="header-label" v-show="$route.path !== '/mobile'" @click="goHome">
       <touch-ripple :speed="1" :opacity="0.3" color="#C0C4CC" transition="ease" class="item" >
         <img src="../svg/index.svg" class="icons" />
       </touch-ripple>
@@ -35,6 +35,17 @@ export default {
     labelShow: {
       type: Boolean,
       default: false
+    }
+  },
+  methods: {
+    setScrollTop (scroll_top) {
+      document.documentElement.scrollTop = scroll_top
+      window.pageYOffset = scroll_top
+      document.body.scrollTop = scroll_top
+    },
+    goHome () {
+      this.setScrollTop(0)
+      this.$router.push('/mobile')
     }
   }
 }

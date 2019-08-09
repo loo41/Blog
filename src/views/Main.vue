@@ -5,8 +5,16 @@
 
 <script>
 export default {
-  data: () => ({}),
+  data: () => ({
+    isRun: true
+  }),
   created () {
+    this.isRun = false
+    this.isM()
+    this.isRun = true
+  },
+  activated () {
+    if (!this.isRun) return
     this.isM()
   },
   methods: {
