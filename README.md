@@ -7,3 +7,4 @@
   1. [无需服务器，教你搭建一个完整功能 Blog 系统](https://github.com/loo41/Blog/issues/2)
   2. [wepy 的运行原理探索](https://github.com/loo41/Blog/issues/3)
   3. [浅析 NextTick](https://github.com/loo41/Blog/issues/4)
+  4. [js 面向对象编程(OOP) ps 函数编程编程(FP)](https://github.com/loo41/Blog/issues/5)
