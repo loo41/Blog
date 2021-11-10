@@ -275,7 +275,7 @@ export default {
   height: 2px;
   bottom: 0;
   z-index: 2;
-  background: #E4E7ED;
+  background: #303133;
   transform: scaleX(0);
   transition: transform 1s;
   transform: scaleX(1)
@@ -301,6 +301,16 @@ export default {
 .article-info div {
   display: flex;
   padding-right: 20px;
+  cursor: not-allowed;
+}
+.article-info div:nth-child(3) {
+  cursor: pointer;
+}
+.article-info a {
+  display: block;
+}
+.article-info div:hover {
+  color: #303133;
 }
 .article-info div div{
   box-sizing: border-box;
@@ -329,7 +339,8 @@ export default {
   margin-left: 0
 }
 .label:hover {
-  transform: scale(1.2)
+  transform: scale(1.2);
+  color: #303133;
 }
 .body-sidebar {
   width: 30%;

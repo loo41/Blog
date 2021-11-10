@@ -52,6 +52,7 @@ export default {
   border-bottom-right-radius: 20px;
   display: flex;
   flex-direction: column;
+  z-index: 100;
 }
 .slidbar-item {
   flex: 1;
@@ -69,7 +70,7 @@ export default {
   display: none;
 }
 .slidbar-show:hover {
-  width: 500%;
+  width: 430%;
   display: flex!important;
   justify-content: flex-end;
   box-sizing: border-box;
